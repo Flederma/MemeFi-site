@@ -909,39 +909,30 @@
             });
         });
         
-        // Countdown Timer Logic
-        function updateCountdown() {
-            // Just for demo - static countdown
-            const days = document.getElementById('days');
-            const hours = document.getElementById('hours');
-            const minutes = document.getElementById('minutes');
-            const seconds = document.getElementById('seconds');
-            
-            let sec = parseInt(seconds.textContent);
-            sec = sec > 0 ? sec - 1 : 59;
-            seconds.textContent = sec < 10 ? '0' + sec : sec;
-            
-            if (sec === 59) {
-                let min = parseInt(minutes.textContent);
-                min = min > 0 ? min - 1 : 59;
-                minutes.textContent = min < 10 ? '0' + min : min;
-                
-                if (min === 59) {
-                    let hr = parseInt(hours.textContent);
-                    hr = hr > 0 ? hr - 1 : 23;
-                    hours.textContent = hr < 10 ? '0' + hr : hr;
-                    
-                    if (hr === 23) {
-                        let day = parseInt(days.textContent);
-                        day = day > 0 ? day - 1 : 0;
-                        days.textContent = day < 10 ? '0' + day : day;
-                    }
-                }
-            }
-        }
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
+// Echter Countdown bis 21. April 2025 – 18:00 Uhr CET
+const launchDate = new Date("2025-04-21T18:00:00+02:00").getTime();
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = launchDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+
+    if (distance < 0) {
+        document.querySelector('.countdown-timer').innerHTML = "<div style='font-size:24px;'>The drop is live!</div>";
+    }
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
         
         // Smooth scrolling for all anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
